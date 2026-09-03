@@ -1,0 +1,60 @@
+# Local storage paths and WinSCP configuration
+local:
+  input_dir: "D:/Media/Videos"
+  output_dir: "D:/Media/Subtitles"
+  # Optional: path to winscp.com. If omitted or null, automatically defaults to ../common/winscp.com
+  winscp_path: null
+
+settings:
+  min_vm_free_space_gb: 15
+  max_concurrent_workers: 8
+  # Remote base path where media-pipeline/subtitles is located on worker VMs
+  remote_base_dir: "/home/ubuntu/media-pipeline/subtitles"
+
+# Target models to generate for every video and per-VM queue limits
+models:
+  - model_name: "google-gla:gemini-3.5-flash-lite"
+    max_queue_per_vm: 4
+
+  - model_name: "google-gla:gemini-3.7-flash"
+    max_queue_per_vm: 1
+
+# Optional override for the 6-stage fallback escalation ladder
+fallback_stages:
+  - stage: 1
+    re_encode: false
+    fps: null
+    max_runs: 3
+  - stage: 2
+    re_encode: true
+    fps: 1.0
+    max_runs: 6
+  - stage: 3
+    re_encode: true
+    fps: 0.5
+    max_runs: 9
+  - stage: 4
+    re_encode: true
+    fps: 0.1
+    max_runs: 12
+  - stage: 5
+    re_encode: true
+    fps: 0.01
+    max_runs: 15
+  - stage: 6
+    re_encode: true
+    fps: 0.001
+    max_runs: 18
+
+# Remote worker virtual machines
+vms:
+  - name: "oracle-vm-1"
+    ip: "150.136.xxx.xxx"
+    user: "ubuntu"
+    key: "C:/Users/User/.ssh/id_rsa"
+    key_ppk: "C:/Users/User/.ssh/id_rsa.ppk"
+  - name: "oracle-vm-2"
+    ip: "150.136.yyy.yyy"
+    user: "ubuntu"
+    key: "C:/Users/User/.ssh/id_rsa"
+    key_ppk: "C:/Users/User/.ssh/id_rsa.ppk"

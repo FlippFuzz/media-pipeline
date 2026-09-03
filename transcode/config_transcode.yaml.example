@@ -1,0 +1,25 @@
+# Local storage paths and WinSCP configuration
+local:
+  input_dir: "D:/Media/RawVideos"
+  output_dir: "D:/Media/Transcoded"
+  # Optional: path to winscp.com. If omitted or null, automatically defaults to ../common/winscp.com
+  winscp_path: null
+
+settings:
+  min_vm_free_space_gb: 15
+  max_concurrent_workers: 8
+  # Remote base path on the Linux VMs where transcode is located
+  remote_base_dir: "/home/ubuntu/media-pipeline/transcode"
+
+# Remote worker virtual machines
+vms:
+  - name: "oracle-vm-1"
+    ip: "150.136.xxx.xxx"
+    user: "ubuntu"
+    key: "C:/Users/User/.ssh/id_rsa"
+    key_ppk: "C:/Users/User/.ssh/id_rsa.ppk"
+  - name: "oracle-vm-2"
+    ip: "150.136.yyy.yyy"
+    user: "ubuntu"
+    key: "C:/Users/User/.ssh/id_rsa"
+    key_ppk: "C:/Users/User/.ssh/id_rsa.ppk"
