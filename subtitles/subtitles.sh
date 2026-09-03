@@ -43,7 +43,13 @@ if [ $(( $(date +%s) - $(stat -c %Y "$UPDATE_STAMP" 2>/dev/null || echo 0) )) -g
         # Re-check the stamp now that we hold the lock: another model may have
         # already refreshed it while we were waiting, in which case skip.
         if [ $(( $(date +%s) - $(stat -c %Y "$UPDATE_STAMP" 2>/dev/null || echo 0) )) -gt $UPDATE_INTERVAL ]; then
-            touch "$UPDATE_STAMP"
+            cd "$REPO_DIR"
+            if [ -d .git ]; then
+                OLD_HASH=$(git rev-parse HEAD 2>/dev/null)
+                git reset --hard HEAD >> "$LOG_FILE" 2>&1
+                if git pull >> "$LOG_FILE" 2>&1; then
+                    NEW_HASH=$(git rev-parse HEAD 2>/dev/null)
+                    touch "$UPDATE_STAMP"
 
             cd "$REPO_DIR"
             if [ -d .git ]; then
